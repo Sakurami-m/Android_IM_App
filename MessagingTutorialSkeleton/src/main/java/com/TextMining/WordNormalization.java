@@ -16,10 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Sakurmi on 11/3/2015.
+ * Created by Marwa Khan on 11/3/2016.
+ * Class Description: This class is responsible for removing stop words such as (من ، هو )
+ * In addition, it also remove links, phone numbers within a text message 
  */
 public class WordNormalization {
 
+    // Method to remove the words 
+    // Input: String 
+    // Output: String 
     public static String RemoveWords(String str)
     {
         String newStr = "";
@@ -31,20 +36,15 @@ public class WordNormalization {
 
             ParseQuery<ParseObject> query = ParseQuery.getQuery("IgnoreWordsDatabase");
 
-            //Remove the Word
+                //Remove the Word if it in the stop list
                 query.whereEqualTo("StopWord", str);
 
                 try {
                     List<ParseObject> OutputList = query.find();
 
-                    //System.out.println("Current:" + str + "-");
-                    //System.out.println("Current:" + OutputList.size());
-
                     if (OutputList.size() == 0)
                         newStr += str;
-
-                    //System.out.println(newStr);
-
+                        
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -54,12 +54,10 @@ public class WordNormalization {
              newStr =  RemoveConnectedWords(str);
         }
 
-        //System.out.println("calling Fun"+newStr);
-
         return newStr;
     }
 
-
+    // Method to remove ignore words from a sentence (2 or more connected words)
     private static String RemoveConnectedWords(String str)
     {
         String[] ArrayStr = str.split(" ");
@@ -76,31 +74,21 @@ public class WordNormalization {
                 try {
                     List<ParseObject> OutputList = query.find();
 
-                    //System.out.println("Current:" + ArrayStr[index] + "-");
-                    //System.out.println("Current:" + OutputList.size());
-
-                    //System.out.println(OutputList.size() == 0);
-
                     if (OutputList.size() == 0)
                         newString += ArrayStr[index] + " ";
-
-//                    System.out.println("kkkk:" + newString);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
         }
-  //      System.out.println("Befor sub"+newString +"**");
-
+        
         if (!newString.isEmpty())
            newString = newString.substring(0, newString.length() - 1);
-
-    //    System.out.println("Aftter sub"+newString);
-
         return newString;
     }
 
+    // Method to filter words by removing Hamza, Diactrities...etc.
     public static String FilterWords(String str) {
 
         if (str.matches("^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"))
@@ -139,7 +127,6 @@ public class WordNormalization {
                         testingURL[index] = testingURL[index].substring(0, testingURL[index].length() - 1);
 
                         PrepareData.HasURL = true;
-       //                 CheckPhishingURL (testingURL[index]);
                     }
                 }
 
@@ -168,36 +155,4 @@ public class WordNormalization {
         return CurrentStr;
     }
 
-   /* public static boolean CheckPhishingURL(String url)
-    {
-        String baseURL="https://sb-ssl.google.com/safebrowsing/api/lookup";
-
-        String arguments = "";
-        arguments += URLEncoder.encode("client", "UTF-8") + "=" + URLEncoder.encode("myapp", "UTF-8") + "&";
-        arguments +=URLEncoder.encode("apikey", "UTF-8") + "=" + URLEncoder.encode("12341234", "UTF-8") + "&";
-        arguments +=URLEncoder.encode("appver", "UTF-8") + "=" + URLEncoder.encode("1.5.2", "UTF-8") + "&";
-        arguments +=URLEncoder.encode("pver", "UTF-8") + "=" + URLEncoder.encode("3.0", "UTF-8");
-
-// Construct the url object representing cgi script
-        URL url = new URL(baseURL + "?" + arguments);
-
-// Get a URLConnection object, to write to POST method
-        URLConnection connect = url.openConnection();
-
-// Specify connection settings
-        connect.setDoInput(true);
-        connect.setDoOutput(true);
-
-// Get an output stream for writing
-        OutputStream output = connect.getOutputStream();
-        PrintStream pout = new PrintStream (output);
-        pout.print("2");
-        pout.println();
-        pout.print("http://www.google.com");
-        pout.println();
-        pout.print("http://www.facebook.com");
-        pout.close();
-
-        return true;
-    }*/
 }
