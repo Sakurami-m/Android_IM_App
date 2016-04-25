@@ -14,7 +14,7 @@ import com.sinch.android.rtc.messaging.WritableMessage;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Created by Haya on 10/27/2015.
+ * Created by Haya on 20/3/2016.
  * To display the messages, create a custom list adapter, MessageAdapter. 
  * This will give your app the feel of a "real" messaging app
  */
