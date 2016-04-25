@@ -1,7 +1,7 @@
 package com.sinch.messagingtutorialskeleton;
 
 /**
- * Created by Haya on 11/4/2015.
+ * Created by Haya on 11/3/2016.
  */
 
 import android.util.Log;
@@ -65,12 +65,9 @@ public class Apriori extends Observable {
 
     public static void main(String[] args) throws Exception {
 
-//System.out.println("Apriori main");
                 Apriori ap = new Apriori(args);
             }
 
-    /** parse object of PhishingPatternDB */
-   // ParseObject PhishingPatternDB = new ParseObject("PhishingPatternDB");
 
     String output;
             /** the list of current itemsets */
@@ -87,14 +84,6 @@ public class Apriori extends Observable {
             /** by default, Apriori is used with the command line interface */
             private boolean usedAsLibrary = false;
 
-            /** This is the main interface to use this class as a library */
-   /* public  Apriori(String[] args, Observer ob) throws Exception
-    {
-    	usedAsLibrary = true;
-    	configure(args); //configure(textMSGList);
-    	this.addObserver(ob);
-    	go();
-    }*/
 
             /** generates the apriori itemsets from a file
              *
@@ -152,7 +141,7 @@ public class Apriori extends Observable {
 
                         output = Arrays.toString(itemset);//+ "  (" + ((support / (double) numTransactions)) + " " + support + ")";
 
-    // Save to PhishingPatternDB
+                        // Save to PhishingPatternDB
 
                         ParseObject PhishingPatternDB = new ParseObject("PhishingPatternDB");
 
@@ -176,31 +165,26 @@ public class Apriori extends Observable {
             /** computes numItems, numTransactions, and sets minSup */
             private void configure(String[] args) throws Exception
             {
-                // setting transafile
-             //   if (args.length!=0) transaFile = args[0];//transaFile = args[]
-               // else transaFile = "chess.dat"; // default
-
-                // setting minsupport
-                //	if (args.length>=2) minSup=(Double.valueOf(args[1]).doubleValue());
-                //else minSup = .8;// by default
-                //if (minSup>1 || minSup<0) throw new Exception("minSup: bad value");
-
 
                 // going thourgh the file to compute numItems and  numTransactions
                 numItems = 0;
                 numTransactions=0;
                 //should read from array not file
-           //     BufferedReader data_in = args[y];// new BufferedReader(new FileReader(transaFile));
                 int r=0;
-               // while (data_in.ready()) {
+
                 while (r < args.length){
-                    String line=args [r]; //data_in.readLine();
+                 
+                    String line=args [r]; 
+                    
                     if (line.matches("\\s*")) continue; // be friendly with empty lines
+                    
                     numTransactions++;
+                    
                     StringTokenizer t = new StringTokenizer(line," "); // split upon spaces
+                    
                     while (t.hasMoreTokens()) {
                         int x = Integer.parseInt(t.nextToken());
-                        //log(x);
+
                         if (x+1>numItems) numItems=x+1;
                     }
                     r++;
@@ -250,9 +234,8 @@ public class Apriori extends Observable {
                     {
                         int[] X = itemsets.get(i);
                         int[] Y = itemsets.get(j);
-                           //   int[] z = itemsets.get(j);
+
                         assert (X.length==Y.length);
-                          //   assert (X.length==Y.length==z.length);
 
                         //make a string of the first n-2 tokens of the strings
                         int [] newCand = new int[currentSizeOfItemsets+1];
@@ -329,17 +312,11 @@ public class Apriori extends Observable {
                 boolean match; //whether the transaction has all the items in an itemset
                 int count[] = new int[itemsets.size()]; //the number of successful matches, initialized by zeros
 
-
-                // load the transaction file // should be array
-               // BufferedReader data_in = new BufferedReader(new InputStreamReader(new FileInputStream(transaFile)));
-
                 boolean[] trans = new boolean[numItems];
 
                 // for each transaction
                 for (int i = 0; i < numTransactions; i++) {
 
-                    // boolean[] trans = extractEncoding1(data_in.readLine());
-                  //  String line = data_in.readLine();
                     String line = args[i];
                     line2booleanArray(line, trans);
 
@@ -360,13 +337,10 @@ public class Apriori extends Observable {
                         }
                         if (match) { // if at this point it is a match, increase the count
                             count[c]++;
-                            //log(Arrays.toString(cand)+" is contained in trans "+i+" ("+line+")");
                         }
                     }
 
                 }
-
-            //    data_in.close();
 
                 for (int i = 0; i < itemsets.size(); i++) {
                     // if the count% is larger than the minSup%, add to the candidate to
@@ -375,7 +349,6 @@ public class Apriori extends Observable {
                         foundFrequentItemSet(itemsets.get(i),count[i]);
                         frequentCandidates.add(itemsets.get(i));
                     }
-                    //else log("-- Remove candidate: "+ Arrays.toString(candidates.get(i)) + "  is: "+ ((count[i] / (double) numTransactions)));
                 }
 
                 //new candidates are only the frequent candidates
